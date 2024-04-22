@@ -33,6 +33,12 @@ const init = async () => {
         handler: booksController.update
     });
 
+    server.route({
+        method: 'DELETE',
+        path: '/books/{bookId}',
+        handler: booksController.deleteBook
+    });
+
     await server.start();
     console.log('Server running on %s', server.info.uri);
 };

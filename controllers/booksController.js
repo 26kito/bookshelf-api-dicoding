@@ -4,8 +4,8 @@ const { books } = require("../models/books")
 const getAll = (req, h) => {
     let arr = []
     let booksName = req.query.name
-    let isReading = req.query.isReading
-    let isFinished = req.query.isFinished
+    let isReading = req.query.reading
+    let isFinished = req.query.finished
 
     function pushBookDetails(data) {
         data.forEach(row => {
@@ -128,7 +128,8 @@ const save = (req, h) => {
 const update = (req, h) => {
     let bookId = req.params.bookId
     let { name, year, author, summary, publisher, pageCount, readPage, reading } = req.payload
-    let curDate = new Date().toISOString()
+    let finished = (pageCount === readPage ? true : false)
+    let updatedAt = new Date().toISOString()
 
     if (!name) {
         return h.response({
@@ -147,7 +148,9 @@ const update = (req, h) => {
     let index = books.findIndex((book) => book.id === bookId);
 
     if (index !== -1) {
-        books[index] = { ...books[index], name, year, author, summary, publisher, pageCount, readPage, reading }
+        books[index] = {
+            ...books[index], name, year, author, summary, publisher, pageCount, readPage, finished, reading, updatedAt
+        }
 
         return h.response({
             'status': 'success',
